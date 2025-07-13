@@ -566,8 +566,12 @@ function App({ page }: { page: 'practice' | 'challenge' | 'history' | 'event' | 
     // 기존 숨겨진 셀 클릭 로직
     if (cell.state !== 'hidden') return;
     const newBoard = board.map(row => row.map(cell => ({ ...cell })));
-    openCell(newBoard, row, col);
+    const mineOpened = openCell(newBoard, row, col);
     setBoard(newBoard);
+    if (mineOpened) {
+      setGameState('lost');
+      return;
+    }
     // 승리 체크
     const allClear = newBoard.every(row => row.every(cell => cell.state === 'revealed' || cell.content === 'mine'));
     if (allClear) setGameState('won');
@@ -788,13 +792,30 @@ function App({ page }: { page: 'practice' | 'challenge' | 'history' | 'event' | 
                       </tr>
                     </thead>
                     <tbody>
-                      {rankings[diff] && rankings[diff].length > 0 ? rankings[diff].map((r, i) => (
-                        <tr key={i} style={{ background: i % 2 === 0 ? '#23242a' : 'none' }}>
-                          <td style={{ padding: 8 }}>{i + 1}</td>
-                          <td style={{ padding: 8 }}>{r.username || '-'}</td>
-                          <td style={{ padding: 8 }}>{r.time}</td>
-                        </tr>
-                      )) : (
+                      {rankings[diff] && rankings[diff].length > 0 ? (() => {
+                        let lastTime: number | null = null;
+                        let lastRank = 0;
+                        let skip = 1;
+                        return rankings[diff].map((r, i) => {
+                          let rank;
+                          if (lastTime === r.time) {
+                            rank = lastRank;
+                            skip++;
+                          } else {
+                            rank = i + 1;
+                            lastRank = rank;
+                            lastTime = r.time;
+                            skip = 1;
+                          }
+                          return (
+                            <tr key={i} style={{ background: i % 2 === 0 ? '#23242a' : 'none' }}>
+                              <td style={{ padding: 8 }}>{rank}</td>
+                              <td style={{ padding: 8 }}>{r.username || '-'}</td>
+                              <td style={{ padding: 8 }}>{r.time}</td>
+                            </tr>
+                          );
+                        });
+                      })() : (
                         <tr><td colSpan={3} style={{ textAlign: 'center', color: '#888' }}>기록 없음</td></tr>
                       )}
                     </tbody>
