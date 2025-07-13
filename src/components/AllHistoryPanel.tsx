@@ -36,7 +36,7 @@ const AllHistoryPanel: React.FC = () => {
     <div style={{ maxWidth: 900, margin: '40px auto', background: '#23242a', borderRadius: 16, color: '#fff', padding: 24, boxShadow: '0 2px 16px #0002' }}>
       <h2 style={{ fontSize: 26, fontWeight: 900, marginBottom: 24, textAlign: 'center' }}>모든 유저 전적</h2>
       {loading ? <div style={{ textAlign: 'center', color: '#aaa' }}>로딩중...</div> : (
-        <div style={{ maxHeight: 600, overflowY: 'auto', borderRadius: 10, border: '1px solid #333', boxShadow: '0 1px 8px #0002' }}>
+        <div style={{ maxHeight: 600, overflowX: 'auto', overflowY: 'auto', borderRadius: 10, border: '1px solid #333', boxShadow: '0 1px 8px #0002' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 600 }}>
             <thead style={{ position: 'sticky', top: 0, zIndex: 1, background: '#18191c' }}>
               <tr style={{ color: '#ffd200', fontWeight: 700, fontSize: 17 }}>
@@ -76,6 +76,25 @@ const AllHistoryPanel: React.FC = () => {
           </table>
         </div>
       )}
+      <style>{`
+        @media (max-width: 600px) {
+          div[style*='max-width: 900px'] {
+            padding: 8px !important;
+            margin: 12px 0 !important;
+          }
+          h2[style*='font-size: 26px'] {
+            font-size: 18px !important;
+            margin-bottom: 12px !important;
+          }
+          table {
+            min-width: 420px !important;
+            font-size: 13px !important;
+          }
+          th, td {
+            padding: 6px 4px !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };

@@ -110,13 +110,28 @@ const RankGamePage: React.FC = () => {
             onCellMouseDown={() => {}}
             onCellMouseUp={() => {}}
             onCellMouseLeave={() => {}}
-            cellSize={20}
+            cellSize={window.innerWidth < 600 ? 14 : 20}
           />
           <div style={{ marginTop: 16, fontSize: 18 }}>경과 시간: {elapsed}초</div>
           {gameState === 'won' && <div style={{ color: '#a8ff60', fontWeight: 700, marginTop: 8 }}>🎉 성공!</div>}
           {gameState === 'lost' && <div style={{ color: '#ff6e6e', fontWeight: 700, marginTop: 8 }}>💥 실패!</div>}
         </div>
       </div>
+      <style>{`
+        @media (max-width: 600px) {
+          header[style*='font-size: 24px'] {
+            font-size: 16px !important;
+            height: 44px !important;
+            padding-left: 10px !important;
+          }
+          div[style*='margin-top: 32px'] {
+            margin-top: 10px !important;
+          }
+          div[style*='font-size: 18px'] {
+            font-size: 13px !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };

@@ -7,6 +7,7 @@ import AllHistoryPanel from './components/AllHistoryPanel';
 import { supabase } from './supabase';
 import Chat from './components/Chat';
 import Footer from './components/Footer';
+import ServiceHeaderBar from './components/ServiceHeaderBar';
 
 // 보드 생성 함수 (임시, 나중에 API 대체)
 function createBoard(rows: number, cols: number, mines: number): CellData[][] {
@@ -58,7 +59,7 @@ function formatDateYMDHMS(dateString: string) {
 }
 
 // 랭킹/채팅 임시 컴포넌트
-const RankingPanel = ({ records, difficulty, history, rankings, user }: { records: Record<string, number>, difficulty: string, history: any[], rankings: { [key: string]: any[] }, user: any }) => {
+const RankingPanel = ({ records, difficulty, history, rankings, user, hideTitle }: { records: Record<string, number>, difficulty: string, history: any[], rankings: { [key: string]: any[] }, user: any, hideTitle?: boolean }) => {
   // 유저 닉네임
   const username = user?.user_metadata?.name || (user?.email ? user.email.split('@')[0] : '');
   // 각 난이도별 랭킹 계산
@@ -82,7 +83,7 @@ const RankingPanel = ({ records, difficulty, history, rankings, user }: { record
       fontSize: 16,
       color: '#e0e0e0',
     }}>
-      <div style={{ fontWeight: 700, fontSize: 20, marginBottom: 12, color: '#fff' }}>내 기록</div>
+      {!hideTitle && <div style={{ fontWeight: 700, fontSize: 20, marginBottom: 12, color: '#fff' }}>내 기록</div>}
       <ul style={{ paddingLeft: 0, width: '100%', listStyle: 'none' }}>
         {['easy', 'normal', 'hard'].map(diff => {
           const sec = Number(records[diff]);
@@ -123,171 +124,6 @@ const RankingPanel = ({ records, difficulty, history, rankings, user }: { record
     </div>
   );
 };
-
-// 서비스 헤더바 컴포넌트
-const ServiceHeaderBar = ({ tab, onTabChange, user, onLoginClick, onLogoutClick }: { tab: string, onTabChange: (tab: 'practice' | 'challenge' | 'event' | 'history' | 'users') => void, user: any, onLoginClick: () => void, onLogoutClick: () => void }) => (
-  <header style={{
-    width: '100%',
-    minWidth: 1200,
-    height: 64,
-    background: 'linear-gradient(90deg,#23242a 0%,#3f2b96 100%)',
-    boxShadow: '0 2px 12px #0004',
-    display: 'flex',
-    alignItems: 'center',
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    zIndex: 2000,
-  }}>
-    {/* 왼쪽: 로고 + 탭버튼 */}
-    <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
-      <span style={{ fontWeight: 900, fontSize: 26, color: '#fff', letterSpacing: 2, marginRight: 32, paddingLeft: 32 }}>BOB MINESWEEPER</span>
-      <button
-        onClick={() => onTabChange('practice')}
-        style={{
-          background: tab === 'practice' ? 'linear-gradient(90deg,#a8c0ff,#3f2b96)' : 'transparent',
-          color: tab === 'practice' ? '#fff' : '#e0e0e0',
-          border: 'none',
-          borderRadius: 10,
-          fontWeight: tab === 'practice' ? 800 : 500,
-          fontSize: 18,
-          padding: '10px 28px',
-          cursor: 'pointer',
-          boxShadow: tab === 'practice' ? '0 2px 8px #3f2b9633' : undefined,
-          transition: 'all 0.18s',
-        }}
-        aria-label="게임하기"
-      >게임하기</button>
-      <button
-        onClick={() => onTabChange('challenge')}
-        style={{
-          background: tab === 'challenge' ? 'linear-gradient(90deg,#f7971e,#ffd200)' : 'transparent',
-          color: tab === 'challenge' ? '#23242a' : '#e0e0e0',
-          border: 'none',
-          borderRadius: 10,
-          fontWeight: tab === 'challenge' ? 800 : 500,
-          fontSize: 18,
-          padding: '10px 28px',
-          cursor: 'pointer',
-          boxShadow: tab === 'challenge' ? '0 2px 8px #f7971e33' : undefined,
-          transition: 'all 0.18s',
-        }}
-        aria-label="랭킹"
-      >랭킹</button>
-      <button
-        onClick={() => onTabChange('history')}
-        style={{
-          background: tab === 'history' ? 'linear-gradient(90deg,#ffd200,#ff6e6e)' : 'transparent',
-          color: tab === 'history' ? '#23242a' : '#e0e0e0',
-          border: 'none',
-          borderRadius: 10,
-          fontWeight: tab === 'history' ? 800 : 500,
-          fontSize: 18,
-          padding: '10px 28px',
-          cursor: 'pointer',
-          boxShadow: tab === 'history' ? '0 2px 8px #ffd20033' : undefined,
-          transition: 'all 0.18s',
-        }}
-        aria-label="히스토리"
-      >히스토리</button>
-      <button
-        onClick={() => onTabChange('users')}
-        style={{
-          background: tab === 'users' ? 'linear-gradient(90deg,#00c3ff,#ffff1c)' : 'transparent',
-          color: tab === 'users' ? '#23242a' : '#e0e0e0',
-          border: 'none',
-          borderRadius: 10,
-          fontWeight: tab === 'users' ? 800 : 500,
-          fontSize: 18,
-          padding: '10px 28px',
-          cursor: 'pointer',
-          boxShadow: tab === 'users' ? '0 2px 8px #00c3ff33' : undefined,
-          transition: 'all 0.18s',
-        }}
-        aria-label="유저"
-      >유저</button>
-      <button
-        onClick={() => onTabChange('event')}
-        style={{
-          background: tab === 'event' ? 'linear-gradient(90deg,#43cea2,#185a9d)' : 'transparent',
-          color: tab === 'event' ? '#fff' : '#e0e0e0',
-          border: 'none',
-          borderRadius: 10,
-          fontWeight: tab === 'event' ? 800 : 500,
-          fontSize: 18,
-          padding: '10px 28px',
-          cursor: 'pointer',
-          boxShadow: tab === 'event' ? '0 2px 8px #185a9d33' : undefined,
-          transition: 'all 0.18s',
-        }}
-        aria-label="이벤트"
-      >이벤트</button>
-    </div>
-    {/* 오른쪽: 로그인/회원가입/로그아웃 */}
-    <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginLeft: 'auto', paddingRight: 32 }}>
-      {user && (
-        <span style={{ color: '#ffd200', fontWeight: 700, fontSize: 17, marginRight: 8 }}>
-          사용자 : {user.user_metadata?.name || (user.email ? user.email.split('@')[0] : '익명')}
-        </span>
-      )}
-      {user ? (
-        <button
-          style={{
-            display: 'flex', alignItems: 'center', gap: 8,
-            background: 'linear-gradient(90deg,#ff6e6e,#ffb199)',
-            color: '#fff',
-            border: 'none',
-            borderRadius: 12,
-            fontWeight: 700,
-            fontSize: 17,
-            padding: '9px 24px',
-            minWidth: 110,
-            height: 44,
-            cursor: 'pointer',
-            boxShadow: '0 2px 8px #ff6e6e33',
-            transition: 'all 0.18s',
-            letterSpacing: 1,
-            position: 'relative',
-          }}
-          onClick={onLogoutClick}
-          aria-label="로그아웃"
-        >
-          <span style={{ fontSize: 20, opacity: 0.85 }}>🚪</span>
-          로그아웃
-        </button>
-      ) : (
-        <button
-          style={{
-            display: 'flex', alignItems: 'center', gap: 8,
-            background: 'linear-gradient(90deg,#3f2b96,#a8c0ff)',
-            color: '#fff',
-            border: 'none',
-            borderRadius: 12,
-            fontWeight: 700,
-            fontSize: 17,
-            padding: '9px 24px',
-            minWidth: 110,
-            height: 44,
-            cursor: 'pointer',
-            boxShadow: '0 2px 8px #3f2b9633',
-            transition: 'all 0.18s',
-            letterSpacing: 1,
-            position: 'relative',
-          }}
-          onClick={onLoginClick}
-          aria-label="로그인/회원가입"
-        >
-          <span style={{ fontSize: 20, opacity: 0.85 }}>🔑</span>
-          로그인/회원가입
-        </button>
-        
-      )}
-    </div>
-  </header>
-);
-
-// 난이도 변경 핸들러(확인/취소용 ConfirmModal만 사용)
-// App 함수 내부에 위치해야 함
 
 // App 컴포넌트에 page prop 추가
 function App({ page }: { page: 'practice' | 'challenge' | 'history' | 'event' | 'users' }) {
@@ -669,14 +505,18 @@ function App({ page }: { page: 'practice' | 'challenge' | 'history' | 'event' | 
   };
 
   // 탭 변경 핸들러 (랭킹 탭도 실제로 이동)
-  const handleTabChange = (nextTab: 'practice' | 'challenge' | 'event' | 'history' | 'users') => {
+  const handleTabChange = (nextTab: string) => {
+    if (nextTab === 'home') {
+      navigate('/');
+      return;
+    }
     if (nextTab === 'event') {
       // setInfoMessage('준비중입니다');
       // setInfoOpen(true);
       navigate('/event');
       return;
     }
-    if (nextTab === 'practice') navigate('/');
+    if (nextTab === 'practice') navigate('/game');
     else if (nextTab === 'challenge') navigate('/rank');
     else if (nextTab === 'history') navigate('/history');
     else if (nextTab === 'users') navigate('/users');
@@ -746,6 +586,17 @@ function App({ page }: { page: 'practice' | 'challenge' | 'history' | 'event' | 
     }
   };
 
+  // 모바일 감지
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth <= 1200);
+    onResize();
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+  // 모바일 내기록/채팅 탭 상태
+  const [mobileTab, setMobileTab] = useState<'record' | 'chat'>('record');
+
   return (
     <div className="app-root" style={{ width: '100vw', minHeight: '100vh', background: '#222', boxSizing: 'border-box', padding: 0, margin: 0 }}>
       {/* 헤더 */}
@@ -760,14 +611,24 @@ function App({ page }: { page: 'practice' | 'challenge' | 'history' | 'event' | 
       </div>
       {/* 각 페이지별 분기 */}
       {page === 'users' ? (
-        <div style={{ maxWidth: 900, margin: '80px auto 0', background: '#23242a', borderRadius: 16, color: '#fff', padding: 24, boxShadow: '0 4px 24px #0006' }}>
-          <h2 style={{ fontSize: 28, fontWeight: 900, marginBottom: 32, textAlign: 'center', letterSpacing: 1 }}>유저 리스트</h2>
-          <div style={{ maxHeight: 500, overflowY: 'auto', borderRadius: 12, border: '1px solid #444', background: '#18191c', boxShadow: '0 2px 8px #0003' }}>
-            <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 0, minWidth: 400 }}>
+        <div style={{
+          width: isMobile ? '100%' : '100%',
+          maxWidth: isMobile ? '100vw' : 1400,
+          margin: isMobile ? '80px auto 0' : '80px auto 0',
+          padding: isMobile ? 8 : 24,
+          background: '#23242a',
+          borderRadius: 16,
+          color: '#fff',
+          overflowX: isMobile ? 'auto' : undefined,
+          fontSize: isMobile ? 14 : undefined
+        }}>
+          <h2 style={{ fontSize: isMobile ? 20 : 28, fontWeight: 900, marginBottom: 32, textAlign: 'center', letterSpacing: 1 }}>유저 리스트</h2>
+          <div style={{ maxHeight: 500, overflowY: 'auto', borderRadius: 12, border: '1px solid #444', background: '#18191c', boxShadow: '0 2px 8px #0003', width: isMobile ? '100%' : undefined, overflowX: isMobile ? 'auto' : undefined }}>
+            <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 0, minWidth: isMobile ? undefined : 400, fontSize: isMobile ? 13 : undefined }}>
               <thead style={{ position: 'sticky', top: 0, background: '#23242a', zIndex: 2 }}>
-                <tr style={{ color: '#ffd200', fontWeight: 800, fontSize: 18, textAlign: 'center' }}>
-                  <th style={{ padding: '14px 8px', minWidth: 120, borderBottom: '2px solid #ffd200', background: '#23242a', position: 'sticky', top: 0 }}>닉네임</th>
-                  <th style={{ padding: '14px 8px', minWidth: 180, borderBottom: '2px solid #ffd200', background: '#23242a', position: 'sticky', top: 0 }}>가입일</th>
+                <tr style={{ color: '#ffd200', fontWeight: 800, fontSize: isMobile ? 15 : 18, textAlign: 'center' }}>
+                  <th style={{ padding: isMobile ? '8px 2px' : '14px 8px', minWidth: 80, borderBottom: '2px solid #ffd200', background: '#23242a', position: 'sticky', top: 0 }}>닉네임</th>
+                  <th style={{ padding: isMobile ? '8px 2px' : '14px 8px', minWidth: 80, borderBottom: '2px solid #ffd200', background: '#23242a', position: 'sticky', top: 0 }}>가입일</th>
                 </tr>
               </thead>
               <tbody>
@@ -788,26 +649,28 @@ function App({ page }: { page: 'practice' | 'challenge' | 'history' | 'event' | 
           </div>
         </div>
       ) : page === 'history' ? (
-        <AllHistoryPanel />
+        <div style={{ width: isMobile ? '100%' : undefined, maxWidth: isMobile ? '100vw' : undefined, margin: isMobile ? '80px auto 0' : undefined, padding: isMobile ? 8 : 24, background: '#23242a', borderRadius: 16, color: '#fff', overflowX: isMobile ? 'auto' : undefined, fontSize: isMobile ? 14 : undefined }}>
+          <AllHistoryPanel />
+        </div>
       ) : page === 'challenge' ? (
         // 전체 랭킹 UI 복구
-        <div style={{ width: '100%', maxWidth: 1400, margin: '80px auto 0', padding: 24, background: '#23242a', borderRadius: 16, color: '#fff' }}>
-          <h2 style={{ fontSize: 28, fontWeight: 900, marginBottom: 32, textAlign: 'center', letterSpacing: 1 }}>전체 랭킹</h2>
+        <div style={{ width: isMobile ? '100%' : '100%', maxWidth: isMobile ? '100vw' : 1400, margin: isMobile ? '80px auto 0' : '80px auto 0', padding: isMobile ? 8 : 24, background: '#23242a', borderRadius: 16, color: '#fff', overflowX: isMobile ? 'auto' : undefined, fontSize: isMobile ? 14 : undefined }}>
+          <h2 style={{ fontSize: isMobile ? 20 : 28, fontWeight: 900, marginBottom: 32, textAlign: 'center', letterSpacing: 1 }}>전체 랭킹</h2>
           {/* 최고점 랭킹 섹션 */}
-          <h3 style={{ fontSize: 24, fontWeight: 800, marginBottom: 18, textAlign: 'center', letterSpacing: 1 }}>🏆 최고점 랭킹</h3>
-          <div style={{ display: 'flex', flexDirection: 'row', gap: 24, justifyContent: 'center', marginBottom: 48 }}>
+          <h3 style={{ fontSize: isMobile ? 16 : 24, fontWeight: 800, marginBottom: 18, textAlign: 'center', letterSpacing: 1 }}>🏆 최고점 랭킹</h3>
+          <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: 12, justifyContent: 'center', marginBottom: 32 }}>
             {['easy', 'normal', 'hard'].map(diff => (
-              <div key={diff} style={{ flex: 1, minWidth: 320, background: '#18191c', borderRadius: 12, padding: 20 }}>
-                <h4 style={{ fontSize: 20, fontWeight: 700, marginBottom: 10, textAlign: 'center' }}>
+              <div key={diff} style={{ flex: 1, minWidth: isMobile ? undefined : 320, background: '#18191c', borderRadius: 12, padding: isMobile ? 8 : 20, marginBottom: isMobile ? 12 : 0, overflowX: isMobile ? 'auto' : undefined }}>
+                <h4 style={{ fontSize: isMobile ? 14 : 20, fontWeight: 700, marginBottom: 10, textAlign: 'center' }}>
                   {diff === 'easy' ? '초급' : diff === 'normal' ? '중급' : '고급'} 최고 랭킹
                 </h4>
-                <div style={{ maxHeight: 400, overflowY: 'auto' }}>
-                  <table style={{ width: '100%', marginBottom: 0 }}>
+                <div style={{ maxHeight: isMobile ? 220 : 400, overflowY: 'auto', width: '100%' }}>
+                  <table style={{ width: '100%', marginBottom: 0, fontSize: isMobile ? 13 : undefined }}>
                     <thead>
                       <tr style={{ color: '#a8c0ff', fontWeight: 700 }}>
-                        <th style={{ padding: 8 }}>순위</th>
-                        <th style={{ padding: 8 }}>닉네임</th>
-                        <th style={{ padding: 8 }}>기록(초)</th>
+                        <th style={{ padding: isMobile ? 4 : 8 }}>순위</th>
+                        <th style={{ padding: isMobile ? 4 : 8 }}>닉네임</th>
+                        <th style={{ padding: isMobile ? 4 : 8 }}>기록(초)</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -844,20 +707,20 @@ function App({ page }: { page: 'practice' | 'challenge' | 'history' | 'event' | 
             ))}
           </div>
           {/* 클리어 횟수 랭킹 섹션 */}
-          <h3 style={{ fontSize: 24, fontWeight: 800, marginBottom: 18, textAlign: 'center', letterSpacing: 1 }}>🔥 클리어 횟수 랭킹</h3>
-          <div style={{ display: 'flex', flexDirection: 'row', gap: 24, justifyContent: 'center', marginBottom: 48 }}>
+          <h3 style={{ fontSize: isMobile ? 16 : 24, fontWeight: 800, marginBottom: 18, textAlign: 'center', letterSpacing: 1 }}>🔥 클리어 횟수 랭킹</h3>
+          <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: 12, justifyContent: 'center', marginBottom: 32 }}>
             {['easy', 'normal', 'hard'].map(diff => (
-              <div key={diff} style={{ flex: 1, minWidth: 320, background: '#18191c', borderRadius: 12, padding: 20 }}>
-                <h4 style={{ fontSize: 20, fontWeight: 700, marginBottom: 10, textAlign: 'center' }}>
+              <div key={diff} style={{ flex: 1, minWidth: isMobile ? undefined : 320, background: '#18191c', borderRadius: 12, padding: isMobile ? 8 : 20, marginBottom: isMobile ? 12 : 0, overflowX: isMobile ? 'auto' : undefined }}>
+                <h4 style={{ fontSize: isMobile ? 14 : 20, fontWeight: 700, marginBottom: 10, textAlign: 'center' }}>
                   {diff === 'easy' ? '초급' : diff === 'normal' ? '중급' : '고급'} 클리어 랭킹
                 </h4>
-                <div style={{ maxHeight: 400, overflowY: 'auto' }}>
-                  <table style={{ width: '100%' }}>
+                <div style={{ maxHeight: isMobile ? 220 : 400, overflowY: 'auto', width: '100%' }}>
+                  <table style={{ width: '100%', fontSize: isMobile ? 13 : undefined }}>
                     <thead>
                       <tr style={{ color: '#43cea2', fontWeight: 700 }}>
-                        <th style={{ padding: 8 }}>순위</th>
-                        <th style={{ padding: 8 }}>닉네임</th>
-                        <th style={{ padding: 8 }}>클리어 횟수</th>
+                        <th style={{ padding: isMobile ? 4 : 8 }}>순위</th>
+                        <th style={{ padding: isMobile ? 4 : 8 }}>닉네임</th>
+                        <th style={{ padding: isMobile ? 4 : 8 }}>클리어 횟수</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -877,15 +740,15 @@ function App({ page }: { page: 'practice' | 'challenge' | 'history' | 'event' | 
             ))}
           </div>
           {/* 전체 클리어 횟수 랭킹 */}
-          <h3 style={{ fontSize: 24, fontWeight: 800, marginBottom: 18, textAlign: 'center', letterSpacing: 1 }}>🌟 전체 클리어 랭킹</h3>
-          <div style={{ maxWidth: 700, margin: '0 auto', background: '#18191c', borderRadius: 12, padding: 20 }}>
-            <div style={{ maxHeight: 400, overflowY: 'auto' }}>
-              <table style={{ width: '100%' }}>
+          <h3 style={{ fontSize: isMobile ? 16 : 24, fontWeight: 800, marginBottom: 18, textAlign: 'center', letterSpacing: 1 }}>🌟 전체 클리어 랭킹</h3>
+          <div style={{ maxWidth: isMobile ? '100%' : 700, margin: '0 auto', background: '#18191c', borderRadius: 12, padding: isMobile ? 8 : 20, overflowX: isMobile ? 'auto' : undefined }}>
+            <div style={{ maxHeight: isMobile ? 220 : 400, overflowY: 'auto', width: '100%' }}>
+              <table style={{ width: '100%', fontSize: isMobile ? 13 : undefined }}>
                 <thead>
                   <tr style={{ color: '#ffd200', fontWeight: 700 }}>
-                    <th style={{ padding: 8 }}>순위</th>
-                    <th style={{ padding: 8 }}>닉네임</th>
-                    <th style={{ padding: 8 }}>클리어 횟수</th>
+                    <th style={{ padding: isMobile ? 4 : 8 }}>순위</th>
+                    <th style={{ padding: isMobile ? 4 : 8 }}>닉네임</th>
+                    <th style={{ padding: isMobile ? 4 : 8 }}>클리어 횟수</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -922,151 +785,358 @@ function App({ page }: { page: 'practice' | 'challenge' | 'history' | 'event' | 
         <>
           {/* 기존 내기록/게임판/채팅 등 기존 UI 유지 */}
           <div className="difficulty-bar" style={{
-            paddingTop: 72,
+            paddingTop: isMobile ? 64 : 72,
             display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
+            flexDirection: isMobile ? 'column' : 'row',
+            alignItems: isMobile ? 'stretch' : 'center',
             justifyContent: 'center',
             width: '100%',
-            gap: 0,
+            gap: isMobile ? 8 : 0,
             minHeight: 56,
-            minWidth: 1000,
+            minWidth: isMobile ? undefined : 1000,
+            boxSizing: 'border-box',
+            paddingLeft: isMobile ? 8 : 0,
+            paddingRight: isMobile ? 8 : 0,
           }}>
-            {/* 가운데: 난이도/커스텀 UI */}
             <div className="difficulty-center" style={{
-              flex: '0 1 880px', // 랭킹+게임 영역만큼
-              maxWidth: 880,
-              minWidth: 880,
+              flex: isMobile ? undefined : '0 1 880px',
+              maxWidth: isMobile ? '100%' : 880,
+              minWidth: isMobile ? undefined : 880,
               display: 'flex',
               alignItems: 'center',
-              gap: 14,
+              gap: isMobile ? 8 : 14,
               justifyContent: 'center',
-              flexWrap: 'nowrap', // 줄바꿈 방지
+              flexWrap: isMobile ? 'wrap' : 'nowrap',
+              rowGap: isMobile ? 8 : undefined,
+              columnGap: isMobile ? 8 : undefined,
             }}>
-              <span style={{ fontWeight: 'bold', color: '#fff', marginRight: 8, whiteSpace: 'nowrap' }}>난이도:</span>
-              <button
-                onClick={() => handleDifficultyChange('easy')}
-                style={{
-                  fontWeight: difficulty === 'easy' ? 'bold' : 'normal',
-                  minWidth: 60,
-                  padding: '8px 16px',
-                  whiteSpace: 'nowrap',
-                  borderRadius: 8,
-                  border: difficulty === 'easy' ? '2px solid #43cea2' : '1px solid #444',
-                  background: difficulty === 'easy' ? 'linear-gradient(90deg,#43cea2,#185a9d)' : '#18191c',
-                  color: difficulty === 'easy' ? '#fff' : '#e0e0e0',
-                  boxShadow: difficulty === 'easy' ? '0 2px 8px #43cea233' : undefined,
-                  transition: 'all 0.18s',
-                  cursor: 'pointer',
-                }}
-              >초급</button>
-              <button
-                onClick={() => handleDifficultyChange('normal')}
-                style={{
-                  fontWeight: difficulty === 'normal' ? 'bold' : 'normal',
-                  minWidth: 60,
-                  padding: '8px 16px',
-                  whiteSpace: 'nowrap',
-                  borderRadius: 8,
-                  border: difficulty === 'normal' ? '2px solid #ffd200' : '1px solid #444',
-                  background: difficulty === 'normal' ? 'linear-gradient(90deg,#ffd200,#f7971e)' : '#18191c',
-                  color: difficulty === 'normal' ? '#23242a' : '#e0e0e0',
-                  boxShadow: difficulty === 'normal' ? '0 2px 8px #ffd20033' : undefined,
-                  transition: 'all 0.18s',
-                  cursor: 'pointer',
-                }}
-              >중급</button>
-              <button
-                onClick={() => handleDifficultyChange('hard')}
-                style={{
-                  fontWeight: difficulty === 'hard' ? 'bold' : 'normal',
-                  minWidth: 60,
-                  padding: '8px 16px',
-                  whiteSpace: 'nowrap',
-                  borderRadius: 8,
-                  border: difficulty === 'hard' ? '2px solid #a8c0ff' : '1px solid #444',
-                  background: difficulty === 'hard' ? 'linear-gradient(90deg,#3f2b96,#a8c0ff)' : '#18191c',
-                  color: difficulty === 'hard' ? '#fff' : '#e0e0e0',
-                  boxShadow: difficulty === 'hard' ? '0 2px 8px #3f2b9633' : undefined,
-                  transition: 'all 0.18s',
-                  cursor: 'pointer',
-                }}
-              >고급</button>
-              <span style={{ color: '#fff', marginLeft: 16, whiteSpace: 'nowrap' }}>커스텀:</span>
-              <input type="number" min={5} max={40} value={customRows} onChange={e => setCustomRows(Number(e.target.value))} style={{ width: 56, minWidth: 40, padding: '6px 4px', whiteSpace: 'nowrap' }} />
-              <span style={{ color: '#fff', whiteSpace: 'nowrap' }}>x</span>
-              <input type="number" min={5} max={40} value={customCols} onChange={e => setCustomCols(Number(e.target.value))} style={{ width: 56, minWidth: 40, padding: '6px 4px', whiteSpace: 'nowrap' }} />
-              <span style={{ color: '#fff', whiteSpace: 'nowrap' }}>지뢰</span>
-              <input type="number" min={1} max={customRows * customCols - 1} value={customMines} onChange={e => setCustomMines(Number(e.target.value))} style={{ width: 64, minWidth: 48, padding: '6px 4px', whiteSpace: 'nowrap' }} />
-              <button onClick={handleCustomApply} style={{ minWidth: 48, padding: '8px 16px', whiteSpace: 'nowrap' }}>적용</button>
+              <span style={{ fontWeight: 'bold', color: '#fff', marginRight: 8, whiteSpace: 'nowrap', fontSize: isMobile ? 15 : undefined }}>난이도:</span>
+              {isMobile ? (
+                <>
+                  <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
+                    <button
+                      onClick={() => handleDifficultyChange('easy')}
+                      style={{
+                        fontWeight: difficulty === 'easy' ? 'bold' : 'normal',
+                        minWidth: 48,
+                        padding: '6px 10px',
+                        fontSize: 15,
+                        whiteSpace: 'nowrap',
+                        borderRadius: 8,
+                        border: difficulty === 'easy' ? '2px solid #43cea2' : '1px solid #444',
+                        background: difficulty === 'easy' ? 'linear-gradient(90deg,#43cea2,#185a9d)' : '#18191c',
+                        color: difficulty === 'easy' ? '#fff' : '#e0e0e0',
+                        boxShadow: difficulty === 'easy' ? '0 2px 8px #43cea233' : undefined,
+                        transition: 'all 0.18s',
+                        cursor: 'pointer',
+                      }}
+                    >초급</button>
+                    <button
+                      onClick={() => handleDifficultyChange('normal')}
+                      style={{
+                        fontWeight: difficulty === 'normal' ? 'bold' : 'normal',
+                        minWidth: 48,
+                        padding: '6px 10px',
+                        fontSize: 15,
+                        whiteSpace: 'nowrap',
+                        borderRadius: 8,
+                        border: difficulty === 'normal' ? '2px solid #ffd200' : '1px solid #444',
+                        background: difficulty === 'normal' ? 'linear-gradient(90deg,#ffd200,#f7971e)' : '#18191c',
+                        color: difficulty === 'normal' ? '#23242a' : '#e0e0e0',
+                        boxShadow: difficulty === 'normal' ? '0 2px 8px #ffd20033' : undefined,
+                        transition: 'all 0.18s',
+                        cursor: 'pointer',
+                      }}
+                    >중급</button>
+                    <button
+                      onClick={() => handleDifficultyChange('hard')}
+                      style={{
+                        fontWeight: difficulty === 'hard' ? 'bold' : 'normal',
+                        minWidth: 48,
+                        padding: '6px 10px',
+                        fontSize: 15,
+                        whiteSpace: 'nowrap',
+                        borderRadius: 8,
+                        border: difficulty === 'hard' ? '2px solid #a8c0ff' : '1px solid #444',
+                        background: difficulty === 'hard' ? 'linear-gradient(90deg,#3f2b96,#a8c0ff)' : '#18191c',
+                        color: difficulty === 'hard' ? '#fff' : '#e0e0e0',
+                        boxShadow: difficulty === 'hard' ? '0 2px 8px #3f2b9633' : undefined,
+                        transition: 'all 0.18s',
+                        cursor: 'pointer',
+                      }}
+                    >고급</button>
+                  </div>
+                  <div style={{ display: 'flex', gap: 8 }}>
+                    <span style={{ color: '#fff', whiteSpace: 'nowrap', fontSize: 15 }}>커스텀:</span>
+                    <input type="number" min={5} max={40} value={customRows} onChange={e => setCustomRows(Number(e.target.value))} style={{ width: 36, minWidth: 32, padding: '4px 2px', fontSize: 15, whiteSpace: 'nowrap' }} />
+                    <span style={{ color: '#fff', whiteSpace: 'nowrap', fontSize: 15 }}>x</span>
+                    <input type="number" min={5} max={40} value={customCols} onChange={e => setCustomCols(Number(e.target.value))} style={{ width: 36, minWidth: 32, padding: '4px 2px', fontSize: 15, whiteSpace: 'nowrap' }} />
+                    <span style={{ color: '#fff', whiteSpace: 'nowrap', fontSize: 15 }}>지뢰</span>
+                    <input type="number" min={1} max={customRows * customCols - 1} value={customMines} onChange={e => setCustomMines(Number(e.target.value))} style={{ width: 40, minWidth: 32, padding: '4px 2px', fontSize: 15, whiteSpace: 'nowrap' }} />
+                    <button onClick={handleCustomApply} style={{ minWidth: 36, padding: '6px 10px', fontSize: 15, whiteSpace: 'nowrap' }}>적용</button>
+                  </div>
+                </>
+              ) : (
+                // 기존 데스크탑 레이아웃
+                <>
+                  {/* 난이도 버튼들 */}
+                  <button
+                    onClick={() => handleDifficultyChange('easy')}
+                    style={{
+                      fontWeight: difficulty === 'easy' ? 'bold' : 'normal',
+                      minWidth: 48,
+                      padding: '6px 10px',
+                      fontSize: 15,
+                      whiteSpace: 'nowrap',
+                      borderRadius: 8,
+                      border: difficulty === 'easy' ? '2px solid #43cea2' : '1px solid #444',
+                      background: difficulty === 'easy' ? 'linear-gradient(90deg,#43cea2,#185a9d)' : '#18191c',
+                      color: difficulty === 'easy' ? '#fff' : '#e0e0e0',
+                      boxShadow: difficulty === 'easy' ? '0 2px 8px #43cea233' : undefined,
+                      transition: 'all 0.18s',
+                      cursor: 'pointer',
+                    }}
+                  >초급</button>
+                  <button
+                    onClick={() => handleDifficultyChange('normal')}
+                    style={{
+                      fontWeight: difficulty === 'normal' ? 'bold' : 'normal',
+                      minWidth: 48,
+                      padding: '6px 10px',
+                      fontSize: 15,
+                      whiteSpace: 'nowrap',
+                      borderRadius: 8,
+                      border: difficulty === 'normal' ? '2px solid #ffd200' : '1px solid #444',
+                      background: difficulty === 'normal' ? 'linear-gradient(90deg,#ffd200,#f7971e)' : '#18191c',
+                      color: difficulty === 'normal' ? '#23242a' : '#e0e0e0',
+                      boxShadow: difficulty === 'normal' ? '0 2px 8px #ffd20033' : undefined,
+                      transition: 'all 0.18s',
+                      cursor: 'pointer',
+                    }}
+                  >중급</button>
+                  <button
+                    onClick={() => handleDifficultyChange('hard')}
+                    style={{
+                      fontWeight: difficulty === 'hard' ? 'bold' : 'normal',
+                      minWidth: 48,
+                      padding: '6px 10px',
+                      fontSize: 15,
+                      whiteSpace: 'nowrap',
+                      borderRadius: 8,
+                      border: difficulty === 'hard' ? '2px solid #a8c0ff' : '1px solid #444',
+                      background: difficulty === 'hard' ? 'linear-gradient(90deg,#3f2b96,#a8c0ff)' : '#18191c',
+                      color: difficulty === 'hard' ? '#fff' : '#e0e0e0',
+                      boxShadow: difficulty === 'hard' ? '0 2px 8px #3f2b9633' : undefined,
+                      transition: 'all 0.18s',
+                      cursor: 'pointer',
+                    }}
+                  >고급</button>
+                  <span style={{ color: '#fff', marginLeft: 16, whiteSpace: 'nowrap', fontSize: isMobile ? 15 : undefined }}>커스텀:</span>
+                  <input type="number" min={5} max={40} value={customRows} onChange={e => setCustomRows(Number(e.target.value))} style={{ width: isMobile ? 36 : 56, minWidth: 32, padding: isMobile ? '4px 2px' : '6px 4px', fontSize: isMobile ? 15 : undefined, whiteSpace: 'nowrap' }} />
+                  <span style={{ color: '#fff', whiteSpace: 'nowrap', fontSize: isMobile ? 15 : undefined }}>x</span>
+                  <input type="number" min={5} max={40} value={customCols} onChange={e => setCustomCols(Number(e.target.value))} style={{ width: isMobile ? 36 : 56, minWidth: 32, padding: isMobile ? '4px 2px' : '6px 4px', fontSize: isMobile ? 15 : undefined, whiteSpace: 'nowrap' }} />
+                  <span style={{ color: '#fff', whiteSpace: 'nowrap', fontSize: isMobile ? 15 : undefined }}>지뢰</span>
+                  <input type="number" min={1} max={customRows * customCols - 1} value={customMines} onChange={e => setCustomMines(Number(e.target.value))} style={{ width: isMobile ? 40 : 64, minWidth: 32, padding: isMobile ? '4px 2px' : '6px 4px', fontSize: isMobile ? 15 : undefined, whiteSpace: 'nowrap' }} />
+                  <button onClick={handleCustomApply} style={{ minWidth: isMobile ? 36 : 48, padding: isMobile ? '6px 10px' : '8px 16px', fontSize: isMobile ? 15 : undefined, whiteSpace: 'nowrap' }}>적용</button>
+                </>
+              )}
             </div>
             {/* 오른쪽: 게임 상태 */}
-            <div className="difficulty-right" style={{
-              flex: '0 1 340px',
-              minWidth: 300,
-              maxWidth: 400,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'flex-end',
-              gap: 12,
-            }}>
-              <span style={{ color: '#fff', fontWeight: 700, fontSize: 18, whiteSpace: 'nowrap' }}>
-                난이도: {(
-                  difficulty === 'easy' ? '초급' :
-                  difficulty === 'normal' ? '중급' :
-                  difficulty === 'hard' ? '고급' :
-                  '커스텀'
-                )} | 시간: {formatTime(elapsed)}
-              </span>
-              <button onClick={() => openConfirm('정말 다시 시작하시겠습니까?', resetGame)}
-                style={{
-                  marginLeft: 12,
-                  padding: '7px 28px',
-                  fontWeight: 600,
-                  borderRadius: 8,
-                  border: '1px solid #646cff',
-                  background: '#646cff',
-                  color: '#fff',
-                  fontSize: 16,
-                  minWidth: 120,
-                  cursor: 'pointer',
-                  boxShadow: '0 2px 8px #3f2b9633',
-                  transition: 'all 0.18s',
-                }}
-              >다시하기</button>
-            </div>
-          </div>
-          <div className="main-content" style={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'center', marginTop: 12 }}>
-            {/* 랭킹 */}
-            <div className="ranking-panel">
-              <RankingPanel records={records} difficulty={difficulty} history={history} rankings={rankings} user={user} />
-            </div>
-            {/* 게임판 */}
-            <div className="game-container" style={{ width: containerWidth, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start' }}>
-              <div style={{
-                width: boardWidth,
-                height: boardHeight,
-                background: '#222',
+            {!isMobile && (
+              <div className="difficulty-right" style={{
+                flex: '0 1 340px',
+                minWidth: 300,
+                maxWidth: 400,
                 display: 'flex',
-                justifyContent: 'center',
                 alignItems: 'center',
-                border: '2px solid #888',
-                marginBottom: 16,
+                justifyContent: 'flex-end',
+                gap: 12,
               }}>
-                <MinesweeperBoard
-                  board={board}
-                  onCellClick={handleCellClickWithTimer}
-                  onCellRightClick={handleCellRightClick}
-                  pressedCells={pressedCells}
-                  onCellMouseDown={handleCellMouseDown}
-                  onCellMouseUp={handleCellMouseUp}
-                  onCellMouseLeave={handleCellMouseLeave}
-                  cellSize={cellSize}
-                />
+                <span style={{ color: '#fff', fontWeight: 700, fontSize: 18, whiteSpace: 'nowrap' }}>
+                  난이도: {(
+                    difficulty === 'easy' ? '초급' :
+                    difficulty === 'normal' ? '중급' :
+                    difficulty === 'hard' ? '고급' :
+                    '커스텀'
+                  )} | 시간: {formatTime(elapsed)}
+                </span>
+                <button onClick={() => openConfirm('정말 다시 시작하시겠습니까?', resetGame)}
+                  style={{
+                    marginLeft: 12,
+                    padding: '7px 28px',
+                    fontWeight: 600,
+                    borderRadius: 8,
+                    border: '1px solid #646cff',
+                    background: '#646cff',
+                    color: '#fff',
+                    fontSize: 16,
+                    minWidth: 120,
+                    cursor: 'pointer',
+                    boxShadow: '0 2px 8px #3f2b9633',
+                    transition: 'all 0.18s',
+                  }}
+                >다시하기</button>
               </div>
-            </div>
-            {/* 채팅  todo */}
-            {user && <Chat user={user} />}
+            )}
+          </div>
+          {/* 메인 컨텐츠 */}
+          <div className="main-content" style={{
+            width: '100%',
+            display: 'flex',
+            flexDirection: isMobile ? 'column' : 'row',
+            alignItems: isMobile ? 'stretch' : 'flex-start',
+            justifyContent: 'center',
+            marginTop: isMobile ? 8 : 12,
+            gap: isMobile ? 12 : 0,
+            boxSizing: 'border-box',
+            paddingLeft: isMobile ? 8 : 0,
+            paddingRight: isMobile ? 8 : 0,
+          }}>
+            {/* 모바일: 내기록/채팅 탭 전환 + 게임판 */}
+            {isMobile ? (
+              <>
+                {/* 게임 상태(난이도/시간/다시하기) - 모바일 */}
+                <div style={{
+                  width: '100%',
+                  maxWidth: 400,
+                  margin: '0 auto 8px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  background: 'rgba(35,36,42,0.95)',
+                  borderRadius: 10,
+                  padding: '8px 14px',
+                  fontSize: 15,
+                  color: '#fff',
+                  fontWeight: 700,
+                  boxShadow: '0 2px 8px #0002',
+                }}>
+                  <span>난이도: {(
+                    difficulty === 'easy' ? '초급' :
+                    difficulty === 'normal' ? '중급' :
+                    difficulty === 'hard' ? '고급' :
+                    '커스텀')}</span>
+                  <span>시간: {formatTime(elapsed)}</span>
+                  <button onClick={() => openConfirm('정말 다시 시작하시겠습니까?', resetGame)}
+                    style={{
+                      marginLeft: 8,
+                      padding: '6px 14px',
+                      fontWeight: 600,
+                      borderRadius: 8,
+                      border: '1px solid #646cff',
+                      background: '#646cff',
+                      color: '#fff',
+                      fontSize: 14,
+                      minWidth: 60,
+                      cursor: 'pointer',
+                      boxShadow: '0 2px 8px #3f2b9633',
+                      transition: 'all 0.18s',
+                    }}
+                  >다시하기</button>
+                </div>
+                {/* 게임판은 항상 위에 고정 */}
+                <div className="game-container" style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', marginBottom: 8 }}>
+                  <div style={{
+                    width: '95vw',
+                    maxWidth: 500,
+                    aspectRatio: '1/1',
+                    background: '#222',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    border: '2px solid #888',
+                    margin: '0 auto 16px',
+                  }}>
+                    <MinesweeperBoard
+                      board={board}
+                      onCellClick={handleCellClickWithTimer}
+                      onCellRightClick={handleCellRightClick}
+                      pressedCells={pressedCells}
+                      onCellMouseDown={handleCellMouseDown}
+                      onCellMouseUp={handleCellMouseUp}
+                      onCellMouseLeave={handleCellMouseLeave}
+                      cellSize={Math.floor(Math.min(Math.min(window.innerWidth * 0.95, 500) / cols, Math.min(window.innerWidth * 0.95, 500) / rows))}
+                    />
+                  </div>
+                </div>
+                {/* 내기록/채팅 토글 버튼 (중간 배치) */}
+                <div style={{ width: '100%', maxWidth: 400, margin: '0 auto 8px', display: 'flex' }}>
+                  <button onClick={() => setMobileTab('record')} style={{
+                    flex: 1,
+                    padding: '10px 0',
+                    fontWeight: mobileTab === 'record' ? 700 : 400,
+                    background: mobileTab === 'record'
+                      ? 'linear-gradient(90deg,#43cea2,#185a9d)'
+                      : '#23242a',
+                    color: mobileTab === 'record' ? '#fff' : '#bbb',
+                    border: 'none',
+                    borderRadius: '10px 0 0 10px',
+                    fontSize: 16,
+                    cursor: 'pointer',
+                    transition: 'all 0.18s',
+                    boxShadow: mobileTab === 'record' ? '0 2px 8px #43cea233' : undefined,
+                  }}>내 기록</button>
+                  <button onClick={() => setMobileTab('chat')} style={{
+                    flex: 1,
+                    padding: '10px 0',
+                    fontWeight: mobileTab === 'chat' ? 700 : 400,
+                    background: mobileTab === 'chat'
+                      ? 'linear-gradient(90deg,#ffd200,#f7971e)'
+                      : '#23242a',
+                    color: mobileTab === 'chat' ? '#fff' : '#bbb',
+                    border: 'none',
+                    borderRadius: '0 10px 10px 0',
+                    fontSize: 16,
+                    cursor: 'pointer',
+                    transition: 'all 0.18s',
+                    boxShadow: mobileTab === 'chat' ? '0 2px 8px #ffd20033' : undefined,
+                  }}>채팅</button>
+                </div>
+                {/* 내기록/채팅을 감싸는 공통 div */}
+                <div className="panel-container" style={{ width: '100%', maxWidth: 400, margin: '0 auto', marginBottom: 8, background: '#23242a', borderRadius: 12, minHeight: 200, padding: 12 }}>
+                  {mobileTab === 'record' ? (
+                    <>
+                      <div style={{ textAlign: 'left', fontWeight: 700, fontSize: 20, color: '#fff', marginBottom: 8 }}>내 기록</div>
+                      <RankingPanel records={records} difficulty={difficulty} history={history} rankings={rankings} user={user} hideTitle />
+                    </>
+                  ) : (
+                    user && <Chat user={user} />
+                  )}
+                </div>
+              </>
+            ) : (
+              <>
+                {/* 데스크탑: 내기록, 게임판, 채팅 가로 배치 */}
+                <div className="ranking-panel">
+                  <RankingPanel records={records} difficulty={difficulty} history={history} rankings={rankings} user={user} />
+                </div>
+                <div className="game-container" style={{ width: containerWidth, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start' }}>
+                  <div style={{
+                    width: boardWidth,
+                    height: boardHeight,
+                    background: '#222',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    border: '2px solid #888',
+                    marginBottom: 16,
+                  }}>
+                    <MinesweeperBoard
+                      board={board}
+                      onCellClick={handleCellClickWithTimer}
+                      onCellRightClick={handleCellRightClick}
+                      pressedCells={pressedCells}
+                      onCellMouseDown={handleCellMouseDown}
+                      onCellMouseUp={handleCellMouseUp}
+                      onCellMouseLeave={handleCellMouseLeave}
+                      cellSize={cellSize}
+                    />
+                  </div>
+                </div>
+                {/* 채팅 */}
+                {user && <Chat user={user} />}
+              </>
+            )}
           </div>
         </>
       )}

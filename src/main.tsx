@@ -8,6 +8,8 @@ import Home from './components/Home';
 import { useEffect, useState } from 'react';
 import { supabase } from './supabase';
 import type { ReactNode } from 'react';
+import Terms from './components/Terms';
+import Privacy from './components/Privacy';
 
 function RequireAuth({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<any>(undefined);
@@ -39,6 +41,8 @@ function AppWithAuthRoutes() {
       <Route path="/event" element={<RequireAuth><App page="event" /></RequireAuth>} />
       <Route path="/users" element={<RequireAuth><App page="users" /></RequireAuth>} />
       <Route path="/auth" element={<LoginSignup onAuthSuccess={handleAuthSuccess} />} />
+      <Route path="/terms" element={<Terms />} />
+      <Route path="/privacy" element={<Privacy />} />
     </Routes>
   );
 }

@@ -9,6 +9,7 @@ const LoginSignup: React.FC<{ onAuthSuccess?: () => void }> = ({ onAuthSuccess }
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [agree, setAgree] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -125,6 +126,9 @@ const LoginSignup: React.FC<{ onAuthSuccess?: () => void }> = ({ onAuthSuccess }
         <form onSubmit={handleSubmit}>
           {mode === 'signup' && (
             <div style={{ marginBottom: 16 }}>
+              <div style={{ fontSize: 13, color: '#ffd200', marginTop: 4, marginLeft: 2 }}>
+                *슈파베이스 표준때문에 어쩔수없이 이메일 요구
+              </div>
               <input
                 type="text"
                 placeholder="이메일"
@@ -133,9 +137,6 @@ const LoginSignup: React.FC<{ onAuthSuccess?: () => void }> = ({ onAuthSuccess }
                 required
                 style={{ width: '100%', padding: 10, borderRadius: 6, border: '1px solid #444', background: '#18191c', color: '#e0e0e0', fontSize: 16 }}
               />
-              <div style={{ fontSize: 13, color: '#ffd200', marginTop: 4, marginLeft: 2 }}>
-                (슈파베이스 표준때문에 어쩔수없이 이메일이 있음..)
-              </div>
             </div>
           )}
           {mode === 'signup' && (
@@ -172,8 +173,22 @@ const LoginSignup: React.FC<{ onAuthSuccess?: () => void }> = ({ onAuthSuccess }
               style={{ width: '100%', padding: 10, borderRadius: 6, border: '1px solid #444', background: '#18191c', color: '#e0e0e0', fontSize: 16 }}
             />
           </div>
+          {mode === 'signup' && (
+            <label style={{ display: 'block', margin: '12px 0' }}>
+              <input
+                type="checkbox"
+                checked={agree}
+                onChange={e => setAgree(e.target.checked)}
+                required
+              />
+              <span style={{ marginLeft: 8 }}>
+                <a href="/terms" target="_blank" rel="noopener noreferrer">이용약관</a> 및
+                <a href="/privacy" target="_blank" rel="noopener noreferrer"> 개인정보처리방침</a>에 동의합니다.
+              </span>
+            </label>
+          )}
           {error && <div style={{ color: '#ff6e6e', marginBottom: 12, textAlign: 'center' }}>{error}</div>}
-          <button type="submit" disabled={loading} style={{ width: '100%', padding: 12, borderRadius: 8, background: '#646cff', color: '#fff', fontWeight: 700, fontSize: 17, border: 'none', cursor: 'pointer', marginBottom: 10 }}>
+          <button type="submit" disabled={loading || (mode === 'signup' && !agree)} style={{ width: '100%', padding: 12, borderRadius: 8, background: '#646cff', color: '#fff', fontWeight: 700, fontSize: 17, border: 'none', cursor: 'pointer', marginBottom: 10 }}>
             {loading ? '처리중...' : mode === 'login' ? '로그인' : '회원가입'}
           </button>
         </form>
