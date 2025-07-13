@@ -533,18 +533,25 @@ function App({ page }: { page: 'practice' | 'challenge' | 'history' | 'event' | 
       if (flagCount === cell.content) {
         const newBoard = board.map(row => row.map(cell => ({ ...cell })));
         let changed = false;
+        let mineOpened = false;
         for (let dr = -1; dr <= 1; dr++) {
           for (let dc = -1; dc <= 1; dc++) {
             if (dr === 0 && dc === 0) continue;
             const nr = row + dr, nc = col + dc;
             if (nr >= 0 && nr < rows && nc >= 0 && nc < cols) {
               if (newBoard[nr][nc].state === 'hidden') {
-                // 재귀적으로 오픈
-                openCell(newBoard, nr, nc);
+                // 재귀적으로 오픈, 지뢰가 열렸는지 체크
+                const openedMine = openCell(newBoard, nr, nc);
+                if (openedMine) mineOpened = true;
                 changed = true;
               }
             }
           }
+        }
+        if (mineOpened) {
+          setBoard(newBoard);
+          setGameState('lost');
+          return;
         }
         if (changed) {
           setBoard(newBoard);
@@ -567,8 +574,9 @@ function App({ page }: { page: 'practice' | 'challenge' | 'history' | 'event' | 
   };
 
   // 셀 오픈(빈칸 BFS 포함) 함수 분리
-  function openCell(board: CellData[][], row: number, col: number) {
-    if (board[row][col].state !== 'hidden') return;
+  // 지뢰를 열면 true 반환, 아니면 false 반환
+  function openCell(board: CellData[][], row: number, col: number): boolean {
+    if (board[row][col].state !== 'hidden') return false;
     // 주변이 모두 열린 셀/깃발이면 자동으로 오픈
     let surrounded = true;
     for (let dr = -1; dr <= 1; dr++) {
@@ -582,13 +590,13 @@ function App({ page }: { page: 'practice' | 'challenge' | 'history' | 'event' | 
     }
     if (surrounded) {
       board[row][col].state = 'revealed';
-      return;
+      return false;
     }
     if (board[row][col].content === 'mine') {
       board[row][col].state = 'revealed';
-      setGameState('lost');
-      return;
+      return true;
     }
+    let mineOpened = false;
     const queue = [[row, col]];
     while (queue.length) {
       const [r, c] = queue.shift()!;
@@ -604,8 +612,11 @@ function App({ page }: { page: 'practice' | 'challenge' | 'history' | 'event' | 
             }
           }
         }
+      } else if (board[r][c].content === 'mine') {
+        mineOpened = true;
       }
     }
+    return mineOpened;
   }
 
   // 셀 우클릭 핸들러
