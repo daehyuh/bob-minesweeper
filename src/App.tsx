@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import AllHistoryPanel from './components/AllHistoryPanel';
 import { supabase } from './supabase';
 import Chat from './components/Chat';
+import Footer from './components/Footer';
 
 // 보드 생성 함수 (임시, 나중에 API 대체)
 function createBoard(rows: number, cols: number, mines: number): CellData[][] {
@@ -723,8 +724,25 @@ function App({ page }: { page: 'practice' | 'challenge' | 'history' | 'event' | 
 
   // 로그아웃 핸들러
   const handleLogout = async () => {
-    await supabase.auth.signOut();
-    setUser(null);
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        setInfoMessage('로그아웃 실패: ' + error.message);
+        setInfoOpen(true);
+        return;
+      }
+      // 세션이 정말 삭제됐는지 확인
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        setInfoMessage('세션이 완전히 삭제되지 않았습니다. 새로고침 해보세요.');
+        setInfoOpen(true);
+      }
+      setUser(null);
+      navigate('/auth');
+    } catch (e: any) {
+      setInfoMessage('로그아웃 중 오류: ' + (e?.message || e));
+      setInfoOpen(true);
+    }
   };
 
   return (
@@ -1067,6 +1085,7 @@ function App({ page }: { page: 'practice' | 'challenge' | 'history' | 'event' | 
         onCancel={() => setInfoOpen(false)}
         confirmText="확인"
       />
+      <Footer />
     </div>
   );
 }

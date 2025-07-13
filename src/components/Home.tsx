@@ -29,9 +29,6 @@ const Home: React.FC = () => {
         <li>초/중/고급 및 커스텀 난이도 지원</li>
       </ul>
       <button onClick={() => navigate('/auth')} style={{ fontSize: 22, fontWeight: 700, padding: '16px 48px', borderRadius: 12, background: 'linear-gradient(90deg,#3f2b96,#a8c0ff)', color: '#fff', border: 'none', boxShadow: '0 2px 8px #3f2b9633', cursor: 'pointer', marginBottom: 16 }}>로그인 / 회원가입</button>
-      <div style={{ marginTop: 40, opacity: 0.7 }}>
-        <span style={{ fontSize: 15 }}>© 2024 BOB Minesweeper. All rights reserved.</span>
-      </div>
     </div>
   );
 };

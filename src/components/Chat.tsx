@@ -21,6 +21,7 @@ const Chat: React.FC<{ user: User | null }> = ({ user }) => {
   const [sending, setSending] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const hasScrolledRef = useRef(false);
 
   // 메시지 불러오기 (폴링 방식)
   useEffect(() => {
@@ -39,9 +40,12 @@ const Chat: React.FC<{ user: User | null }> = ({ user }) => {
     return () => clearInterval(interval);
   }, []);
 
-  // 스크롤 하단 이동
+  // 최초 메시지 로드 후 한 번만 스크롤 하단 이동
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (!hasScrolledRef.current && messages.length > 0) {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      hasScrolledRef.current = true;
+    }
   }, [messages]);
 
   const handleSend = async (e: React.FormEvent) => {
@@ -57,7 +61,7 @@ const Chat: React.FC<{ user: User | null }> = ({ user }) => {
     });
     setInput('');
     setSending(false);
-    inputRef.current?.focus();
+    // inputRef.current?.focus(); // 자동 포커스 제거
   };
 
   return (
