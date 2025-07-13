@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 // DrawerMenu: 모바일에서만 보이는 사이드 메뉴
 const DrawerMenu = ({ open, onClose, tab, onTabChange, user, onLoginClick, onLogoutClick }: {

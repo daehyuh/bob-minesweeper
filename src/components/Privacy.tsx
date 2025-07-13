@@ -1,4 +1,3 @@
-import React from 'react';
 
 const Privacy = () => (
   <div style={{ width: '100vw', minHeight: '100vh', background: '#23242a', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
