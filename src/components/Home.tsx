@@ -306,7 +306,7 @@ const Home: React.FC = () => {
             width: '100vw',
             height: '100vh',
             objectFit: 'cover',
-            filter: 'blur(16px) brightness(0.5)',
+            filter: 'blur(1px) brightness(0.5)',
             position: 'absolute',
             top: 0,
             left: 0,
