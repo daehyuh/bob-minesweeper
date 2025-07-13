@@ -726,19 +726,20 @@ function App({ page }: { page: 'practice' | 'challenge' | 'history' | 'event' | 
   const handleLogout = async () => {
     try {
       const { error } = await supabase.auth.signOut();
+      // 'Auth session missing!' 에러는 무시하고, 세션이 없으면 성공 처리
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session || (error && error.message === 'Auth session missing!')) {
+        setUser(null);
+        navigate('/');
+        return;
+      }
       if (error) {
         setInfoMessage('로그아웃 실패: ' + error.message);
         setInfoOpen(true);
         return;
       }
-      // 세션이 정말 삭제됐는지 확인
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        setInfoMessage('세션이 완전히 삭제되지 않았습니다. 새로고침 해보세요.');
-        setInfoOpen(true);
-      }
       setUser(null);
-      navigate('/auth');
+      navigate('/');
     } catch (e: any) {
       setInfoMessage('로그아웃 중 오류: ' + (e?.message || e));
       setInfoOpen(true);
