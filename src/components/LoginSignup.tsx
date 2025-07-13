@@ -23,6 +23,7 @@ const LoginSignup: React.FC<{ onAuthSuccess?: () => void }> = ({ onAuthSuccess }
         });
         if (loginError) throw loginError;
         setSuccessMessage('로그인 성공!');
+        if (onAuthSuccess) onAuthSuccess();
       } else {
         // 회원가입: 이메일+이름+비밀번호
         // 닉네임 중복 체크
