@@ -29,7 +29,7 @@ const Footer: React.FC = () => (
       만든사람 : Best of the Best 14기 보안제품개발 트랙 강대현
     </div>
     <div style={{ color: '#e0e0e0', fontWeight: 600, fontSize: 16, marginBottom: 2 }}>
-      BOB 친구 구해요..! 개발 좋아하는 ENFJ 04년생입니당
+      BOB 친구 구해요..! 서비스 개발 좋아하는 ENFJ 04년생입니당😆
     </div>
     <div style={{ display: 'flex', flexDirection: 'row', gap: 18, marginTop: 2, flexWrap: 'wrap', justifyContent: 'center' }}>
       <a
