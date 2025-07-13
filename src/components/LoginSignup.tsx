@@ -120,14 +120,15 @@ const LoginSignup: React.FC<{ onAuthSuccess?: () => void }> = ({ onAuthSuccess }
           marginBottom: 18,
           textAlign: 'center',
         }}>
-          PC 전체화면에서 즐겨주세요.<br />이메일은 막써도 됩니다
+         Supabase 표준 정책상 이메일 입력이 필수입니다.
+          <br/>자유롭게 아무 이메일 주소나 입력해주세요.
         </div>
         <h2 style={{ textAlign: 'center', marginBottom: 24 }}>{mode === 'login' ? '로그인' : '회원가입'}</h2>
         <form onSubmit={handleSubmit}>
           {mode === 'signup' && (
             <div style={{ marginBottom: 16 }}>
               <div style={{ fontSize: 13, color: '#ffd200', marginTop: 4, marginLeft: 2 }}>
-                *슈파베이스 표준때문에 어쩔수없이 이메일 요구
+                *Supabase 표준 정책상 이메일 입력이 필수입니다.
               </div>
               <input
                 type="text"

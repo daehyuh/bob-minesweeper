@@ -520,6 +520,7 @@ function App({ page }: { page: 'practice' | 'challenge' | 'history' | 'event' | 
     else if (nextTab === 'challenge') navigate('/rank');
     else if (nextTab === 'history') navigate('/history');
     else if (nextTab === 'users') navigate('/users');
+    else if (nextTab === 'developer') navigate('/developer');
   };
 
   // 커스텀 난이도 적용
@@ -1156,7 +1157,7 @@ function App({ page }: { page: 'practice' | 'challenge' | 'history' | 'event' | 
         onCancel={() => setInfoOpen(false)}
         confirmText="확인"
       />
-      <Footer />
+      {page !== 'users' && <Footer />}
     </div>
   );
 }

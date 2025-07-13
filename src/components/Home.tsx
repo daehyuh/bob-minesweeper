@@ -48,8 +48,8 @@ const Home: React.FC = () => {
       case 'users':
         navigate('/users');
         break;
-      case 'event':
-        navigate('/event');
+      case 'developer':
+        navigate('/developer');
         break;
       default:
         break;

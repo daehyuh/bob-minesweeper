@@ -40,8 +40,7 @@ const DrawerMenu = ({ open, onClose, tab, onTabChange, user, onLoginClick, onLog
       <button onClick={() => { onTabChange('practice'); onClose(); }} style={{ background: tab === 'practice' ? '#a8c0ff' : 'transparent', color: tab === 'practice' ? '#23242a' : '#fff', fontWeight: 700, fontSize: 20, border: 'none', borderRadius: 8, padding: '12px 24px', margin: '4px 16px', textAlign: 'left', cursor: 'pointer' }}>게임하기</button>
       <button onClick={() => { onTabChange('challenge'); onClose(); }} style={{ background: tab === 'challenge' ? '#ffd200' : 'transparent', color: tab === 'challenge' ? '#23242a' : '#fff', fontWeight: 700, fontSize: 20, border: 'none', borderRadius: 8, padding: '12px 24px', margin: '4px 16px', textAlign: 'left', cursor: 'pointer' }}>랭킹</button>
       <button onClick={() => { onTabChange('history'); onClose(); }} style={{ background: tab === 'history' ? '#ff6e6e' : 'transparent', color: tab === 'history' ? '#23242a' : '#fff', fontWeight: 700, fontSize: 20, border: 'none', borderRadius: 8, padding: '12px 24px', margin: '4px 16px', textAlign: 'left', cursor: 'pointer' }}>히스토리</button>
-      <button onClick={() => { onTabChange('users'); onClose(); }} style={{ background: tab === 'users' ? '#ffff1c' : 'transparent', color: tab === 'users' ? '#23242a' : '#fff', fontWeight: 700, fontSize: 20, border: 'none', borderRadius: 8, padding: '12px 24px', margin: '4px 16px', textAlign: 'left', cursor: 'pointer' }}>유저</button>
-      <button onClick={() => { onTabChange('event'); onClose(); }} style={{ background: tab === 'event' ? '#43cea2' : 'transparent', color: tab === 'event' ? '#23242a' : '#fff', fontWeight: 700, fontSize: 20, border: 'none', borderRadius: 8, padding: '12px 24px', margin: '4px 16px', textAlign: 'left', cursor: 'pointer' }}>이벤트</button>
+      <button onClick={() => { onTabChange('developer'); onClose(); }} style={{ background: tab === 'developer' ? '#ffe9ec' : 'transparent', color: tab === 'developer' ? '#23242a' : '#fff', fontWeight: 700, fontSize: 20, border: 'none', borderRadius: 8, padding: '12px 24px', margin: '4px 16px', textAlign: 'left', cursor: 'pointer' }}>개발자</button>
       <div style={{ flex: 1 }} />
       {user ? (
         <button onClick={() => { onLogoutClick(); onClose(); }} style={{ background: 'linear-gradient(90deg,#ff6e6e,#ffb199)', color: '#fff', border: 'none', borderRadius: 10, fontWeight: 700, fontSize: 18, padding: '12px 24px', margin: '16px', cursor: 'pointer' }}>로그아웃</button>
@@ -165,21 +164,21 @@ const ServiceHeaderBar = ({ tab, onTabChange, user, onLoginClick, onLogoutClick 
             aria-label="유저"
           >유저</button>
           <button
-            onClick={() => onTabChange('event')}
+            onClick={() => onTabChange('developer')}
             style={{
-              background: tab === 'event' ? 'linear-gradient(90deg,#43cea2,#185a9d)' : 'transparent',
-              color: tab === 'event' ? '#fff' : '#e0e0e0',
+              background: tab === 'developer' ? 'linear-gradient(90deg,#ffe9ec,#a8c0ff)' : 'transparent',
+              color: tab === 'developer' ? '#23242a' : '#e0e0e0',
               border: 'none',
               borderRadius: 10,
-              fontWeight: tab === 'event' ? 800 : 500,
+              fontWeight: tab === 'developer' ? 800 : 500,
               fontSize: 18,
               padding: '10px 28px',
               cursor: 'pointer',
-              boxShadow: tab === 'event' ? '0 2px 8px #185a9d33' : undefined,
+              boxShadow: tab === 'developer' ? '0 2px 8px #ffe9ec66' : undefined,
               transition: 'all 0.18s',
             }}
-            aria-label="이벤트"
-          >이벤트</button>
+            aria-label="개발자"
+          >개발자</button>
         </div>
       )}
       {/* 오른쪽: 로그인/로그아웃 */}

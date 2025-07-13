@@ -10,6 +10,8 @@ import { supabase } from './supabase';
 import type { ReactNode } from 'react';
 import Terms from './components/Terms';
 import Privacy from './components/Privacy';
+import Developer from './components/Developer';
+import AppShell from './components/AppShell';
 
 function RequireAuth({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<any>(undefined);
@@ -38,11 +40,11 @@ function AppWithAuthRoutes() {
       <Route path="/game" element={<RequireAuth><App page="practice" /></RequireAuth>} />
       <Route path="/rank" element={<RequireAuth><App page="challenge" /></RequireAuth>} />
       <Route path="/history" element={<RequireAuth><App page="history" /></RequireAuth>} />
-      <Route path="/event" element={<RequireAuth><App page="event" /></RequireAuth>} />
-      <Route path="/users" element={<RequireAuth><App page="users" /></RequireAuth>} />
       <Route path="/auth" element={<LoginSignup onAuthSuccess={handleAuthSuccess} />} />
       <Route path="/terms" element={<Terms />} />
       <Route path="/privacy" element={<Privacy />} />
+      <Route path="/developer" element={<AppShell><Developer /></AppShell>} />
+      <Route path="/users" element={<AppShell><RequireAuth><App page="users" /></RequireAuth></AppShell>} />
     </Routes>
   );
 }
