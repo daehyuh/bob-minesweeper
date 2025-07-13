@@ -22,6 +22,7 @@ const Chat: React.FC<{ user: User | null }> = ({ user }) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const hasScrolledRef = useRef(false);
+  const messageAreaRef = useRef<HTMLDivElement>(null);
 
   // 메시지 불러오기 (폴링 방식)
   useEffect(() => {
@@ -43,7 +44,9 @@ const Chat: React.FC<{ user: User | null }> = ({ user }) => {
   // 최초 메시지 로드 후 한 번만 스크롤 하단 이동
   useEffect(() => {
     if (!hasScrolledRef.current && messages.length > 0) {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      if (messageAreaRef.current) {
+        messageAreaRef.current.scrollTop = messageAreaRef.current.scrollHeight;
+      }
       hasScrolledRef.current = true;
     }
   }, [messages]);
@@ -84,7 +87,9 @@ const Chat: React.FC<{ user: User | null }> = ({ user }) => {
         minHeight: 0,
         overflowY: 'auto',
         marginBottom: 8
-      }}>
+      }}
+      ref={messageAreaRef}
+      >
         {messages.length === 0 && <div style={{ color: '#888', padding: '8px 0' }}>채팅 메시지 없음</div>}
         {messages.map((msg) => (
           <div key={msg.id} style={{ marginBottom: 6, wordBreak: 'break-all', color: msg.user_id === user?.id ? '#a8ff60' : '#e0e0e0' }}>
