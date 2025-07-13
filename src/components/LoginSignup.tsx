@@ -109,6 +109,18 @@ const LoginSignup: React.FC<{ onAuthSuccess?: () => void }> = ({ onAuthSuccess }
         </div>
       )}
       <div style={{ maxWidth: 340, background: '#23242a', borderRadius: 12, boxShadow: '0 2px 8px #0004', padding: 32, color: '#fff', width: '100%', margin: '0 auto' }}>
+        <div style={{
+          background: '#ffd200',
+          color: '#222',
+          borderRadius: 8,
+          padding: '10px 16px',
+          fontWeight: 700,
+          fontSize: 15,
+          marginBottom: 18,
+          textAlign: 'center',
+        }}>
+          PC 전체화면에서 즐겨주세요.<br />이메일은 막써도 됩니다
+        </div>
         <h2 style={{ textAlign: 'center', marginBottom: 24 }}>{mode === 'login' ? '로그인' : '회원가입'}</h2>
         <form onSubmit={handleSubmit}>
           {mode === 'signup' && (
@@ -121,6 +133,9 @@ const LoginSignup: React.FC<{ onAuthSuccess?: () => void }> = ({ onAuthSuccess }
                 required
                 style={{ width: '100%', padding: 10, borderRadius: 6, border: '1px solid #444', background: '#18191c', color: '#e0e0e0', fontSize: 16 }}
               />
+              <div style={{ fontSize: 13, color: '#ffd200', marginTop: 4, marginLeft: 2 }}>
+                (슈파베이스 표준때문에 어쩔수없이 이메일이 있음..)
+              </div>
             </div>
           )}
           {mode === 'signup' && (
