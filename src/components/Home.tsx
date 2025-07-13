@@ -2,45 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabase';
 import Footer from './Footer';
-import { Link } from 'react-router-dom';
-
-// 미니 헤더: 게임창과 동일한 스타일, 메인 탭만
-const HomeHeader: React.FC = () => (
-  <header style={{
-    width: '100vw',
-    minWidth: 1200,
-    height: 64,
-    background: 'linear-gradient(90deg,#23242a 0%,#3f2b96 100%)',
-    boxShadow: '0 2px 12px #0004',
-    display: 'flex',
-    alignItems: 'center',
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    zIndex: 2000,
-  }}>
-    <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
-      <span style={{ fontWeight: 900, fontSize: 26, color: '#fff', letterSpacing: 2, marginRight: 32, paddingLeft: 32 }}>BOB MINESWEEPER</span>
-      <Link to="/game" style={{ textDecoration: 'none' }}>
-        <button
-          style={{
-            background: 'linear-gradient(90deg,#a8c0ff,#3f2b96)',
-            color: '#fff',
-            border: 'none',
-            borderRadius: 10,
-            fontWeight: 800,
-            fontSize: 18,
-            padding: '10px 28px',
-            cursor: 'pointer',
-            boxShadow: '0 2px 8px #3f2b9633',
-            transition: 'all 0.18s',
-          }}
-          aria-label="게임하기"
-        >게임하기</button>
-      </Link>
-    </div>
-  </header>
-);
 
 const ServiceHeaderBar = ({ tab, onTabChange, user, onLoginClick, onLogoutClick }: { tab: string, onTabChange: (tab: string) => void, user: any, onLoginClick: () => void, onLogoutClick: () => void }) => (
   <header style={{
