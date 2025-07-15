@@ -3,7 +3,6 @@ import MinesweeperBoard from './MinesweeperBoard';
 import type { CellData } from './Cell';
 
 const createBoard = (rows: number, cols: number, mines: number): CellData[][] => {
-  // 기존 App.tsx의 createBoard 함수 복사
   const board: CellData[][] = Array.from({ length: rows }, () =>
     Array.from({ length: cols }, () => ({ state: 'hidden', content: 'empty' }))
   );
@@ -63,8 +62,13 @@ const RankGamePage: React.FC = () => {
     const cell = board[row][col];
     if (cell.state !== 'hidden') return;
     const newBoard = board.map(row => row.map(cell => ({ ...cell })));
+    const wasMine = newBoard[row][col].content === 'mine';
     openCell(newBoard, row, col);
     setBoard(newBoard);
+    if (wasMine) {
+      setGameState('lost');
+      return;
+    }
     const allClear = newBoard.every(row => row.every(cell => cell.state === 'revealed' || cell.content === 'mine'));
     if (allClear) setGameState('won');
   };
@@ -73,7 +77,6 @@ const RankGamePage: React.FC = () => {
     if (board[row][col].state !== 'hidden') return;
     if (board[row][col].content === 'mine') {
       board[row][col].state = 'revealed';
-      setGameState('lost');
       return;
     }
     const queue = [[row, col]];

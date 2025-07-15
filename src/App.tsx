@@ -358,16 +358,25 @@ function App({ page }: { page: 'practice' | 'challenge' | 'history' | 'event' | 
     // 이미 열린 숫자 셀 클릭 시: 주변 깃발 개수 체크 후 확장 오픈
     if (cell.state === 'revealed' && typeof cell.content === 'number') {
       let flagCount = 0;
+      let wrongFlag = false;
       for (let dr = -1; dr <= 1; dr++) {
         for (let dc = -1; dc <= 1; dc++) {
           if (dr === 0 && dc === 0) continue;
           const nr = row + dr, nc = col + dc;
           if (nr >= 0 && nr < rows && nc >= 0 && nc < cols) {
-            if (board[nr][nc].state === 'flagged') flagCount++;
+            if (board[nr][nc].state === 'flagged') {
+              flagCount++;
+              if (board[nr][nc].content !== 'mine') wrongFlag = true;
+            }
           }
         }
       }
       if (flagCount === cell.content) {
+        if (wrongFlag) {
+          // 잘못된 핀(지뢰가 아닌 곳에 flag)이 있으면 게임 오버
+          setGameState('lost');
+          return;
+        }
         const newBoard = board.map(row => row.map(cell => ({ ...cell })));
         let changed = false;
         let mineOpened = false;
